@@ -1,6 +1,14 @@
 package japanese
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
+
+/* === CONTSTANTS === */
+
+var u_hiragana = []string{"つ", "く", "ゅ", "す", "ぬ", "ふ", "む", "ゆ", "ぐ", "ず", "づ", "ぶ", "ぷ", "る"}
+var a_hiragana = []string{"た", "か", "ゃ", "さ", "な", "は", "ま", "や", "が", "ざ", "ざ", "ば", "ぱ", "ら"}
 
 /* === WORDS === */
 
@@ -75,11 +83,9 @@ func (v *UVerb) Negative() Word {
 		return Word{restOfKanji + extra, restOfKana + extra}
 		// otherwise replace with the -a equivalent
 	} else {
-		original := []string{"つ", "く", "ゅ", "す", "ぬ", "ふ", "む", "ゆ", "ぐ", "ず", "づ", "ぶ", "ぷ", "る"}
-		replace := []string{"た", "か", "ゃ", "さ", "な", "は", "ま", "や", "が", "ざ", "ざ", "ば", "ぱ", "ら"}
-		for i, o := range original {
+		for i, o := range u_hiragana {
 			if o == lastCharacter {
-				extra := replace[i] + "ない"
+				extra := a_hiragana[i] + "ない"
 				return Word{restOfKanji + extra, restOfKana + extra}
 			}
 		}
@@ -148,4 +154,20 @@ type Adjective struct {
 
 type NaAdjective struct {
 	Adjective
+}
+
+/* =============== */
+/* === TO ROOT === */
+/* =============== */
+
+/* === MASU FORM === */
+
+func MasuToRoot(masu_form string) (root_form string) {
+	if !strings.HasSuffix(masu_form, "ます") {
+		return ""
+	}
+	masu_rune := []rune(masu_form)
+	root_form_rune := masu_rune[:len(masu_rune)-2]
+	fmt.Println(masu_rune, root_form_rune)
+	return root_form
 }

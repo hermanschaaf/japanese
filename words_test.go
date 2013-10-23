@@ -141,3 +141,37 @@ func (s *JapaneseSuite) TestPastExceptionVerbs(c *C) {
 		c.Check(past_word.kana, Equals, t.past_kana)
 	}
 }
+
+type PoliteTestWord struct {
+	kanji string
+	kana  string
+
+	masu_kanji string
+	masu_kana  string
+
+	mashita_kanji string
+	mashita_kana  string
+
+	masen_kanji string
+	masen_kana  string
+}
+
+// ru-verbs
+var politeRuVerbs = []PoliteTestWord{}
+
+// u-verbs
+var politeUVerbs = []PoliteTestWord{
+	PoliteTestWord{"行く", "いく", "行きます", "いきます", "行きました", "いきました", "行きません", "いきません"},
+	PoliteTestWord{"帰る", "かえる", "帰ります", "かえります", "帰りました", "かえりました", "帰りません", "かえりません"},
+	PoliteTestWord{"読む", "よむ", "読みます", "よみます", "読みました", "よみました", "読みません", "よみません"},
+	PoliteTestWord{"飲む", "のむ", "飲みます", "のみます", "飲みました", "のみました", "飲みません", "のみません"},
+}
+
+func (s *JapaneseSuite) TestMasuToRoot(c *C) {
+	// check that masu-form verbs get change to the correct root form
+	for i := range politeUVerbs {
+		v := politeUVerbs[i]
+		c.Check(v.kanji, Equals, MasuToRoot(v.masu_kanji))
+		c.Check(v.kana, Equals, MasuToRoot(v.masu_kana))
+	}
+}
